@@ -38,19 +38,7 @@ export default function Note({type}) {
         })
     }
 
-    function handleMouseUp() {
-        setIsDragging(false)
-    }
-
     // Title changing logic
-    function handleTitleClick() {
-        setIsTitleEditing(true)
-    }
-
-    function handleTitleChange(e) {
-        setTitle(e.currentTarget.value)
-    }
-
     function handleEnterPress(e) {
         if (e.key === 'Enter' && isTitleEditing) {
             setIsTitleEditing(false)
@@ -62,15 +50,21 @@ export default function Note({type}) {
 
         if (isDragging) {
             window.addEventListener('mousemove', handleMouseMove)
-            window.addEventListener('mouseup', handleMouseUp)
+            window.addEventListener('mouseup', () => setIsDragging(false))
         }
 
         return () => {
             window.removeEventListener('keydown', handleEnterPress)
             window.removeEventListener('mousemove', handleMouseMove)
-            window.removeEventListener('mouseup', handleMouseUp)
+            window.removeEventListener('mouseup', () => setIsDragging(false))
         }
     }, [isDragging, isTitleEditing])
+
+    useEffect(() => {
+        if (window.innerWidth <= 1000) {
+            setPosition({x: 20, y: 70})
+        }
+    }, [])
 
     return (
         <div 
@@ -91,10 +85,10 @@ export default function Note({type}) {
                     className='note__title-input' 
                     type='text' 
                     value={title}
-                    onChange={handleTitleChange} 
+                    onChange={e => setTitle(e.currentTarget.value)} 
                 />
             : 
-                <p className='note__title' onClick={handleTitleClick}>{title}</p>
+                <p className='note__title' onClick={() => setIsTitleEditing(true)}>{title}</p>
             }
             {type === 'text' ? (
                 <>

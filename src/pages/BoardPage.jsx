@@ -13,9 +13,9 @@ import deleteIcon from '../assets/images/delete-icon.svg'
 
 export default function BoardPage() {
     // States
-    const [showMenu, setShowMenu] = useState(false) 
-    const [isLogged, setIsLogged] = useState(() => getIsLogged())
     const [notes, setNotes] = useState([])
+    const [isLogged, setIsLogged] = useState(() => getIsLogged())
+    const [showMenu, setShowMenu] = useState(false) 
     const [showSidebar, setShowSidebar] = useState(false)
 
     if (!isLogged) {
@@ -26,27 +26,28 @@ export default function BoardPage() {
         setShowMenu(prevShow => !prevShow)
     }
 
+    function toggleSidebar() {
+        setShowSidebar(prevSidebar => !prevSidebar)
+    }
+
     // Logout logic
     function handleLogout() {
-        setIsLogged(false)
         logout()
+        setIsLogged(false)
     }
 
     // Note adding logic
     function addNote(type) {
         setNotes(prevNotes => [...prevNotes, {id: uuidv4(), type}])
         setShowMenu(false)
+        setShowSidebar(false)
     }
 
     // Note deleting logic
-    function handleDelete(id) {
+    function deleteNote(id) {
         setNotes(prevNotes => {
             return prevNotes.filter(note => note.id != id)
         })
-    }
-
-    function toggleSidebar() {
-        setShowSidebar(prevSidebar => !prevSidebar)
     }
 
     return (
@@ -78,7 +79,7 @@ export default function BoardPage() {
                     {notes.map((note, index) => (
                         <div className='sidebar__item' key={note.id}>
                             <p>{note.type[0].toUpperCase() + note.type.slice(1)} Note {index + 1}</p>
-                            <button className='sidebar__item-btn' onClick={() => handleDelete(note.id)} aria-label='Delete a note'>
+                            <button className='sidebar__item-btn' onClick={() => deleteNote(note.id)} aria-label='Delete a note'>
                                 <img className='sidebar__item-icon' src={deleteIcon} alt='delete icon' />
                             </button>
                         </div>

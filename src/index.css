@@ -579,10 +579,16 @@ a {
     .sidebar {
         transform: translateX(-100%);
         transform: all .3s ease-in-out;
+        min-width: 200px;
     }
 
     .sidebar.show {
         transform: translateX(0);
+    }
+
+    .sidebar__add-menu {
+        top: 65px;
+        right: 0;
     }
 
     .board__btn {
@@ -591,6 +597,13 @@ a {
         top: 10px;
         right: -103px;
     }
+
+    .canvas-wrap {
+        display: flex;
+        gap: 5px;
+        margin: 10px 0;
+        min-width: 280px;
+    }   
 }
 
 @media (max-width: 768px) {
